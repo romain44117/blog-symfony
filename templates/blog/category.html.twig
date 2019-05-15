@@ -3,7 +3,7 @@
 {% block title %}All articles{% endblock %}
 
 {% block body %}
-    <h1>All articles from {{ category.name }} : </h1>
+    <h1>All articles from category : </h1>
     {% for article in articles %}
         <div>
             <h2>{{ article.id }} / {{ article.title }} - Category : {{ article.category.name }}</h2>
