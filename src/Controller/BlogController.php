@@ -1,13 +1,13 @@
 <?php
 namespace App\Controller;
 
-
-use Psr\Container\ContainerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use App\Entity\Article;
 use App\Entity\Category;
+use App\Form\ArticleSearchType;
+use Symfony\Component\HttpFoundation\Request;
 
 
 class BlogController extends AbstractController
@@ -18,7 +18,6 @@ class BlogController extends AbstractController
      */
     public function index() : Response
     {
-
         $articles = $this->getDoctrine()
             ->getRepository(Article::class)
             ->findAll();
@@ -33,6 +32,8 @@ class BlogController extends AbstractController
             'blog/index.html.twig',
             ['articles' => $articles]
         );
+
+
     }
     /**
      * Getting a article with a formatted slug for title
@@ -81,7 +82,7 @@ class BlogController extends AbstractController
     public function showByCategory(Category $category) : Response
     {
         return $this->render(
-            'blog/category.html.twig',
+            'blog/index.html.twig',
             [
                 'articles' => $category->getArticles(),
                 ]
