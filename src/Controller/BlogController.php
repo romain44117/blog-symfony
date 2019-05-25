@@ -1,6 +1,7 @@
 <?php
 namespace App\Controller;
 
+use App\Entity\Tag;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -88,5 +89,20 @@ class BlogController extends AbstractController
                 ]
         );
 
+    }
+
+    /**
+     * @Route("/tag/{name}", name="show_tag", methods={"GET"})
+     */
+
+    public function showByTag(Tag $tag) :Response
+    {
+        return $this->render(
+            'blog/tag.html.twig',
+            [
+                'tagName' => $tag->getName(),
+                'articles' => $tag->getArticles(),
+            ]
+        );
     }
 }

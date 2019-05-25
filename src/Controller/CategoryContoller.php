@@ -13,8 +13,6 @@ use Symfony\Component\HttpFoundation\Request;
 
 class CategoryContoller extends AbstractController
 {
-
-
     /**
      * @Route("/category", name="category_index")
      * @return Response A response instance
@@ -37,6 +35,4 @@ class CategoryContoller extends AbstractController
 
             ]);
     }
-
-
 }
