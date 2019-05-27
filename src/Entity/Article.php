@@ -40,6 +40,10 @@ class Article
      */
     private $tags;
 
+    private $expanded = true;
+
+    private $multiple = true;
+
     public function __construct()
     {
         $this->tags = new ArrayCollection();
