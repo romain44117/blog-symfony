@@ -8,7 +8,7 @@
     <h1>All articles from : {{ tagName }} </h1>
     {% for article in articles %}
         <div>
-            <h2>{{ article.id }} /{{ article.title }} - Tag : {{ tagName }}</h2>
+            <h2>{{ article.id }}/ <a href="{{ path('article_show',{'id': article.id}) }}">{{ article.title }} </a></h2>
             <p>{{ article.content }}</p>
         </div>
     {% else %}
