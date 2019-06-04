@@ -1,0 +1,6 @@
+{%  extends 'layout_mail.html.twig' %}
+
+{% block body %}
+    un nouvel article est publié!!
+    {{ article.title }} : {{ url('article_show',{'id': article.id})}}
+{% endblock %}
