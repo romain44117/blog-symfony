@@ -26,6 +26,14 @@
             <li class="nav-item">
                 <a class="nav-link disabled" href="#">Disabled</a>
             </li>
+            <li>
+                {% if app.user %}
+                    Bonjour {{ app.user.email }} !
+                    <a href="{{ path('app_logout') }}"> Se déconnecter</a>
+                {% else %}
+                    <a href="{{ path('app_login') }}"> Se connecter</a>
+                {% endif %}
+            </li>
         </ul>
         <form class="form-inline my-2 my-lg-0">
             <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
