@@ -4,12 +4,20 @@ namespace App\Entity;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+use Symfony\Component\Validator\Constraints as Assert;
 use Doctrine\ORM\Mapping as ORM;
+
 use Symfony\Component\Serializer\Annotation\Groups;
 
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\ArticleRepository")
+ *  @UniqueEntity(
+ *     fields={"title"},
+ *     errorPath="title",
+ *     message="ce titre existe déjà."
+ * )
  */
 class Article
 {
@@ -22,11 +30,18 @@ class Article
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Assert\NotBlank()
+     * @Assert\Length(max="255")
      */
     private $title;
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Assert\NotBlank()
+     * @Assert\Regex(
+     *     pattern="/digital/",
+     *     match=false,
+     *     message="en français, il faut dire numérique")
      */
     private $content;
 
