@@ -29,6 +29,7 @@ public function load(ObjectManager $manager)
             ));
         $author->setEmail('author@monsite.com');
         $author->setRoles(['ROLE_AUTHOR']);
+        $this->addReference('user_1', $author);
         $author->setPassword($this->passwordEncoder->encodePassword(
             $author,
             'authorpassword'

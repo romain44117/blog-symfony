@@ -4,6 +4,7 @@
 namespace App\Controller;
 
 use Doctrine\ORM\EntityManagerInterface;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -16,6 +17,7 @@ class CategoryContoller extends AbstractController
     /**
      * @Route("/category", name="category_index")
      * @return Response A response instance
+     * @IsGranted("ROLE_ADMIN")
      */
     public function addCategory( Request $request, EntityManagerInterface $entityManager ) : Response
     {

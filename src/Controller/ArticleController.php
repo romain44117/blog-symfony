@@ -2,16 +2,19 @@
 
 namespace App\Controller;
 
-use App\Form\EntityType;
 use App\Entity\Article;
 use App\Form\ArticleType;
 use App\Repository\ArticleRepository;
 use App\Service\Mailer;
 use App\Service\Slugify;
+
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+
 
 
 /**
@@ -21,6 +24,7 @@ class ArticleController extends AbstractController
 {
     /**
      * @Route("/", name="article_index", methods={"GET"})
+     * @IsGranted("ROLE_USER")
      */
     public function index(ArticleRepository $articleRepository): Response
     {
@@ -31,6 +35,7 @@ class ArticleController extends AbstractController
 
     /**
      * @Route("/new", name="article_new", methods={"GET","POST"})
+     * @IsGranted("ROLE_AUTHOR")
      */
     public function new(Request $request, Slugify $slugify, Mailer $mailer): Response
     {
@@ -68,6 +73,7 @@ class ArticleController extends AbstractController
 
     /**
      * @Route("/{id}/edit", name="article_edit", methods={"GET","POST"})
+     * @Security("user == article.getAuthor() or is_granted('ROLE_ADMIN')")
      */
     public function edit(Request $request, Article $article, Slugify $slugify): Response
     {
@@ -90,6 +96,7 @@ class ArticleController extends AbstractController
 
     /**
      * @Route("/{id}", name="article_delete", methods={"DELETE"})
+     * @IsGranted("ROLE_ADMIN")
      */
     public function delete(Request $request, Article $article): Response
     {
