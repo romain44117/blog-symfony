@@ -20,6 +20,9 @@
                 <td>{{ article.id }}</td>
                 <td>{{ article.title }}</td>
                 <td>{{ article.content }}</td>
+                {% for tag in article.tags %}
+                <td>{{ tag.name }}</td>
+                {% endfor %}
                 <td>
                     <a href="{{ path('article_show', {'id': article.id}) }}">show</a>
                     {% if is_granted('ROLE_ADMIN') or app.user == article.author %}
