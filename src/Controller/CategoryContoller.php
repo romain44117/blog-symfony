@@ -27,6 +27,8 @@ class CategoryContoller extends AbstractController
 
         if ($form->isSubmitted()){
             $entityManager->persist($category);
+            $this->addFlash('success', 'The new category has been created');
+
             $entityManager->flush();
         }
 

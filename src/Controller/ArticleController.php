@@ -7,7 +7,6 @@ use App\Form\ArticleType;
 use App\Repository\ArticleRepository;
 use App\Service\Mailer;
 use App\Service\Slugify;
-
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -51,6 +50,8 @@ class ArticleController extends AbstractController
             $article->setAuthor($author);
             $entityManager->persist($article);
             $entityManager->flush();
+            $this->addFlash('success', 'The new article has been created');
+
             $mailer->sendMailNewArticle($article);
 
             return $this->redirectToRoute('article_index');
@@ -83,6 +84,8 @@ class ArticleController extends AbstractController
         $article->setSlug($slugify->generate($article->getTitle()));
         if ($form->isSubmitted() && $form->isValid()) {
             $this->getDoctrine()->getManager()->flush();
+            $this->addFlash('success', 'The new article has been edited');
+
 
             return $this->redirectToRoute('article_index', [
                 'id' => $article->getId(),
@@ -105,6 +108,8 @@ class ArticleController extends AbstractController
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->remove($article);
             $entityManager->flush();
+            $this->addFlash('danger', 'The new article has been deleted');
+
         }
 
         return $this->redirectToRoute('article_index');

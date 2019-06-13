@@ -5,11 +5,11 @@ use App\Entity\Tag;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\Routing\Annotation\Route;
 use App\Entity\Article;
 use App\Entity\Category;
 use App\Form\ArticleSearchType;
-use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Serializer\SerializerInterface;
 
 
@@ -96,7 +96,6 @@ class BlogController extends AbstractController
     /**
      * @Route("/tag/{name}", name="show_tag", methods={"GET"})
      */
-
     public function showByTag(Tag $tag) :Response
     {
         return $this->render(
@@ -106,5 +105,18 @@ class BlogController extends AbstractController
                 'articles' => $tag->getArticles(),
             ]
         );
+    }
+
+    /**
+     * @Route("/blog", name="blog_index")
+     */
+    public function sessionIndex(SessionInterface $session) : Response
+    {
+        if (!$session->has('total')) {
+            $session->set('total', 0); // if total doesn’t exist in session, it is initialized.
+        }
+
+        $total = $session->get('total'); // get actual value in session with ‘total' key.
+
     }
 }
