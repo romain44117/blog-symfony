@@ -7,6 +7,8 @@ use App\Form\ArticleType;
 use App\Repository\ArticleRepository;
 use App\Service\Mailer;
 use App\Service\Slugify;
+use Doctrine\Common\Persistence\ObjectManager;
+use Doctrine\ORM\EntityManager;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -17,12 +19,12 @@ use Symfony\Component\Routing\Annotation\Route;
 
 
 /**
- * @Route("/article")
+ * @Route("/article", name ="article_")
  */
 class ArticleController extends AbstractController
 {
     /**
-     * @Route("/", name="article_index", methods={"GET"})
+     * @Route("/", name="index", methods={"GET"})
      * @IsGranted("ROLE_USER")
      */
     public function index(ArticleRepository $articleRepository): Response
@@ -34,7 +36,7 @@ class ArticleController extends AbstractController
     }
 
     /**
-     * @Route("/new", name="article_new", methods={"GET","POST"})
+     * @Route("/new", name="new", methods={"GET","POST"})
      * @IsGranted("ROLE_AUTHOR")
      */
     public function new(Request $request, Slugify $slugify, Mailer $mailer): Response
@@ -64,17 +66,18 @@ class ArticleController extends AbstractController
     }
 
     /**
-     * @Route("/{id}", name="article_show", methods={"GET"})
+     * @Route("/{id}", name="show", methods={"GET"})
      */
     public function show(Article $article): Response
     {
         return $this->render('article/show.html.twig', [
             'article' => $article,
+            'isFavorite' => $this->getUser()->isFavorite($article)
         ]);
     }
 
     /**
-     * @Route("/{id}/edit", name="article_edit", methods={"GET","POST"})
+     * @Route("/{id}/edit", name="edit", methods={"GET","POST"})
      * @Security("user == article.getAuthor() or is_granted('ROLE_ADMIN')")
      */
     public function edit(Request $request, Article $article, Slugify $slugify): Response
@@ -99,7 +102,7 @@ class ArticleController extends AbstractController
     }
 
     /**
-     * @Route("/{id}", name="article_delete", methods={"DELETE"})
+     * @Route("/{id}", name="delete", methods={"DELETE"})
      * @IsGranted("ROLE_ADMIN")
      */
     public function delete(Request $request, Article $article): Response
@@ -115,5 +118,22 @@ class ArticleController extends AbstractController
         return $this->redirectToRoute('article_index');
     }
 
+    /**
+     * @Route("/{id}/favorite", name="favorite", methods={"GET","POST"})
+     */
+    public function favorite(Request $request, Article $article, ObjectManager $manager): Response
+    {
+        if ($this->getUser()->getFavorites()->contains($article)) {
+            $this->getUser()->removeFavorite($article)   ;
+        }
+        else {
+            $this->getUser()->addFavorite($article);
+        }
 
+        $manager->flush();
+
+        return $this->json([
+            'isFavorite' => $this->getUser()->isFavorite($article)
+        ]);
+    }
 }

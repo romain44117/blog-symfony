@@ -4,6 +4,7 @@
 
 {% block body %}
     <h1>Article</h1>
+    <a onclick="addToFavorite()">{{ isFavorite ? '<i id="favorite" class="fas fa-heart"></i>' : '<i id="favorite" class="far fa-heart"></i>' }}</a>
 
     <table class="table">
         <tbody>
@@ -38,4 +39,24 @@
         {% endfor %}
     </ul>
 
+{% endblock %}
+
+{% block javascripts %}
+    <script>
+        function addToFavorite() {
+            fetch('{{ path('article_favorite', {'id': article.id}) }}')
+                .then(response => response.json())
+                .then(json => {
+                    let favoriteElt = document.getElementById('favorite');
+                    if (json.isFavorite) {
+                        favoriteElt.classList.remove('far');
+                        favoriteElt.classList.add('fas');
+                    }
+                    else {
+                        favoriteElt.classList.remove('fas');
+                        favoriteElt.classList.add('far');
+                    }
+                });
+        }
+    </script>
 {% endblock %}
